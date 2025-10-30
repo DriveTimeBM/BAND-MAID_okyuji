@@ -58,6 +58,15 @@ body {
 fetch('all_setlists.json')
   .then(response => response.json())
   .then(data => {
+    // Sort by Date descending, then by Sequence ascending
+    data.sort((a, b) => {
+      const dateA = new Date(a.Date);
+      const dateB = new Date(b.Date);
+      if (dateA > dateB) return -1;
+      if (dateA < dateB) return 1;
+      return a.Sequence - b.Sequence;
+    });
+
     const container = document.getElementById('setlists');
     const grouped = {};
 
@@ -66,6 +75,7 @@ fetch('all_setlists.json')
       if (!grouped[item.SetId]) grouped[item.SetId] = [];
       grouped[item.SetId].push(item);
     });
+
 
     // Render each set
     Object.values(grouped).forEach(set => {
