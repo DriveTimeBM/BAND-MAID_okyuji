@@ -59,11 +59,11 @@ body {
       .then(data => {
         // Sort: Date DESC, then SetId ASC, then Sequence ASC
         data.sort((a, b) => {
-          const tA = new Date(a.Date).getTime();
-          const tB = new Date(b.Date).getTime();
-          if (tA !== tB) return tB - tA;           // newer first
-          if (a.SetId !== b.SetId) return a.SetId - b.SetId;
-          return a.Sequence - b.Sequence;          // song order inside set
+            const dateA = new Date(a.Date);
+            const dateB = new Date(b.Date);
+            if (dateA > dateB) return -1;
+            if (dateA < dateB) return 1;
+            return a.Sequence - b.Sequence;
         });
     
         const container = document.getElementById('setlists');
