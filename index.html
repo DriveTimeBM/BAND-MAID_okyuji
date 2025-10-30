@@ -57,28 +57,25 @@ body {
     fetch('setlists.json')
       .then(r => r.json())
       .then(data => {
-        // Sort: Date DESC, then SetId ASC, then Sequence ASC
+        // Sort by Date DESC, then Sequence ASC
         data.sort((a, b) => {
-            const dateA = new Date(a.Date);
-            const dateB = new Date(b.Date);
-            if (dateA > dateB) return -1;
-            if (dateA < dateB) return 1;
-            return a.Sequence - b.Sequence;
+          if (a.Date !== b.Date) return b.Date.localeCompare(a.Date);
+          return a.Sequence - b.Sequence;
         });
     
         const container = document.getElementById('setlists');
-        const grouped = {};
+        const grouped = new Map();
     
-        // Group songs by SetId in sorted order (preserves desired set order)
+        // Preserve sorted order by inserting into Map
         data.forEach(item => {
-          if (!grouped[item.SetId]) grouped[item.SetId] = [];
-          grouped[item.SetId].push(item);
+          if (!grouped.has(item.SetId)) grouped.set(item.SetId, []);
+          grouped.get(item.SetId).push(item);
         });
     
-        // Render
-        Object.values(grouped).forEach(set => {
+        // Render in insertion order (keeps date descending)
+        for (const set of grouped.values()) {
           const first = set[0];
-          const date = new Date(first.Date).toISOString().split('T')[0];
+          const date = first.Date;
           const headerText = `${date} ${first.City} ${first.Country} ${first.Venue}`;
     
           const wrapper = document.createElement('div');
@@ -101,7 +98,7 @@ body {
           list.className = 'setlist';
           set.forEach(song => {
             const li = document.createElement('li');
-            li.textContent = song.Sequence + '. ' + song.Song;
+            li.textContent = `${song.Sequence}. ${song.Song}`;
             list.appendChild(li);
           });
     
@@ -112,13 +109,13 @@ body {
           wrapper.appendChild(header);
           wrapper.appendChild(list);
           container.appendChild(wrapper);
-        });
+        }
       })
       .catch(err => {
         console.error('Error loading setlists:', err);
         document.getElementById('setlists').textContent = 'Failed to load setlists.';
       });
-    </script>
+    </script>    
     
 
 </body>
