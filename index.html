@@ -54,75 +54,72 @@ body {
 <div id="setlists"></div>
 
 <script>
-// Load JSON and render
-fetch('setlists.json')
-  .then(response => response.json())
-  .then(data => {
-    // Sort by Date descending, then by Sequence ascending
-    data.sort((a, b) => {
-      const dateA = new Date(a.Date);
-      const dateB = new Date(b.Date);
-      if (dateA > dateB) return -1;
-      if (dateA < dateB) return 1;
-      return a.Sequence - b.Sequence;
-    });
-
-    const container = document.getElementById('setlists');
-    const grouped = {};
-
-    // Group songs by SetId
-    data.forEach(item => {
-      if (!grouped[item.SetId]) grouped[item.SetId] = [];
-      grouped[item.SetId].push(item);
-    });
-
-
-    // Render each set
-    Object.values(grouped).forEach(set => {
-      const first = set[0];
-      const date = new Date(first.Date).toISOString().split('T')[0];
-      const headerText = `${date} ${first.City} ${first.Country} ${first.Venue}`;
-
-      const wrapper = document.createElement('div');
-      wrapper.className = 'okyuji';
-
-      const header = document.createElement('div');
-      header.className = 'okyuji-header';
-      header.textContent = headerText;
-
-      // Setlist.fm link
-      const link = document.createElement('a');
-      link.href = first.URL;
-      link.textContent = 'Setlist.fm';
-      link.className = 'link';
-      link.target = '_blank';
-      link.onclick = e => e.stopPropagation(); // Prevent toggle on link click
-
-      header.appendChild(link);
-
-      const list = document.createElement('ul');
-      list.className = 'setlist';
-      set.sort((a,b) => a.Sequence - b.Sequence);
-      set.forEach(song => {
-        const li = document.createElement('li');
-        li.textContent = song.Sequence + '. ' + song.Song;
-        list.appendChild(li);
+    fetch('setlists.json')
+      .then(r => r.json())
+      .then(data => {
+        // Sort: Date DESC, then SetId ASC, then Sequence ASC
+        data.sort((a, b) => {
+          const tA = new Date(a.Date).getTime();
+          const tB = new Date(b.Date).getTime();
+          if (tA !== tB) return tB - tA;           // newer first
+          if (a.SetId !== b.SetId) return a.SetId - b.SetId;
+          return a.Sequence - b.Sequence;          // song order inside set
+        });
+    
+        const container = document.getElementById('setlists');
+        const grouped = {};
+    
+        // Group songs by SetId in sorted order (preserves desired set order)
+        data.forEach(item => {
+          if (!grouped[item.SetId]) grouped[item.SetId] = [];
+          grouped[item.SetId].push(item);
+        });
+    
+        // Render
+        Object.values(grouped).forEach(set => {
+          const first = set[0];
+          const date = new Date(first.Date).toISOString().split('T')[0];
+          const headerText = `${date} ${first.City} ${first.Country} ${first.Venue}`;
+    
+          const wrapper = document.createElement('div');
+          wrapper.className = 'okyuji';
+    
+          const header = document.createElement('div');
+          header.className = 'okyuji-header';
+          header.textContent = headerText;
+    
+          const link = document.createElement('a');
+          link.href = first.URL;
+          link.textContent = 'Setlist.fm';
+          link.className = 'link';
+          link.target = '_blank';
+          link.onclick = e => e.stopPropagation();
+    
+          header.appendChild(link);
+    
+          const list = document.createElement('ul');
+          list.className = 'setlist';
+          set.forEach(song => {
+            const li = document.createElement('li');
+            li.textContent = song.Sequence + '. ' + song.Song;
+            list.appendChild(li);
+          });
+    
+          header.addEventListener('click', () => {
+            list.style.display = list.style.display === 'block' ? 'none' : 'block';
+          });
+    
+          wrapper.appendChild(header);
+          wrapper.appendChild(list);
+          container.appendChild(wrapper);
+        });
+      })
+      .catch(err => {
+        console.error('Error loading setlists:', err);
+        document.getElementById('setlists').textContent = 'Failed to load setlists.';
       });
-
-      header.addEventListener('click', () => {
-        list.style.display = list.style.display === 'block' ? 'none' : 'block';
-      });
-
-      wrapper.appendChild(header);
-      wrapper.appendChild(list);
-      container.appendChild(wrapper);
-    });
-  })
-  .catch(err => {
-    console.error('Error loading setlists:', err);
-    document.getElementById('setlists').textContent = 'Failed to load setlists.';
-  });
-</script>
+    </script>
+    
 
 </body>
 </html>
