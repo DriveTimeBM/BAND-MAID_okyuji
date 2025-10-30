@@ -1,4 +1,4 @@
-﻿# BAND-MAID Okyuji Setlists 🎸
+﻿# All BAND-MAID Setlists (Okyuji) 🎸
 
 This project displays every **BAND-MAID okyuji (live concert)** setlist using data from a JSON file.  
 Each entry expands to reveal the full setlist and includes a link to the corresponding **setlist.fm** page.
@@ -19,10 +19,12 @@ Each entry expands to reveal the full setlist and includes a link to the corresp
 
 ## 📁 Project Structure
 
+```
 BAND-MAID_okyuji/
 ├── index.html # Main page displaying the setlists
 ├── setlists.json # JSON data file with all songs
 └── README.md # This documentation
+```
 
 ---
 
@@ -47,23 +49,17 @@ Example:
 
 ## 🧠 How It Works
 
-The browser fetches and parses setlists.json.
-
-All entries are sorted by Date (descending) and Sequence (ascending).
-
-A Map preserves insertion order while grouping by SetId.
-
-Each show is dynamically rendered into HTML.
-
-JavaScript handles expand/collapse and filtering interactions.
+- The browser fetches and parses setlists.json.
+- All entries are sorted by Date (descending) and Sequence (ascending).
+- A Map preserves insertion order while grouping by SetId.
+- Each show is dynamically rendered into HTML.
+- JavaScript handles expand/collapse and filtering interactions.
 
 ## 💡 Credits
 
-BAND-MAID Okyuji and MV Map: @simeonkr on Discord
-
-Code: HTML + CSS + JavaScript
-
-Concept: BAND-MAID Okyuji archive visualization
+- BAND-MAID Okyuji and MV Map: @simeonkr on Discord
+- Code: HTML + CSS + JavaScript
+- Concept: BAND-MAID Okyuji archive visualization
 
 ---
 
