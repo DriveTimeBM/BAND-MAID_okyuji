@@ -4,7 +4,7 @@ This project displays every **BAND-MAID okyuji (live concert)** setlist using da
 Each entry expands to reveal the full setlist and includes a link to the corresponding **setlist.fm** page.
 
 🔗 **View the setlists here:**  
-[https://drivetimebm.github.io/BAND-MAID_okyuji/index.html](https://drivetimebm.github.io/BAND-MAID_reports/index.html)
+[https://drivetimebm.github.io/BAND-MAID_okyuji/index.html](https://drivetimebm.github.io/BAND-MAID_okyuji/index.html)
 ---
 
 ## 🔧 Features
