@@ -75,3 +75,4 @@ Example:
 - [BAND-MAID Creations](https://github.com/DriveTimeBM/BAND-MAID_creations)
 - [BAND-MAID Setlists (Okyuji)](https://github.com/DriveTimeBM/BAND-MAID_okyuji)
 - [BAND-MAID Translations](https://github.com/DriveTimeBM/BAND-MAID_translations)
+- [BAND-MAID Songs](https://github.com/DriveTimeBM/BAND-MAID_songs)
