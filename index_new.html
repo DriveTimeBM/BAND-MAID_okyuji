@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BAND-MAID Okyuji — Setlists</title>
+<link rel="icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Fira+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold:      #c8a96e;
+    --gold-dim:  #8a6e3e;
+    --gold-glow: rgba(200,169,110,0.18);
+    --bg:        #0d0d0e;
+    --bg2:       #131316;
+    --bg3:       #1a1a1f;
+    --border:    #2a2a32;
+    --text:      #d8d4cc;
+    --text-dim:  #7a7470;
+    --accent:    #c8a96e;
+    --red:       #c0392b;
+    --radius:    4px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Libre Baskerville', Georgia, serif;
+    font-size: 14px;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── Noise texture overlay ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  /* ── Header ── */
+  header {
+    position: relative; z-index: 10;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #0a0a0b 0%, var(--bg) 100%);
+    padding: 18px 24px 14px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  header img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .header-titles {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .header-titles h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    line-height: 1.1;
+  }
+
+  .header-titles .subtitle {
+    font-family: 'Fira Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .header-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #stats {
+    font-family: 'Fira Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    text-align: right;
+    line-height: 1.5;
+  }
+
+  /* ── Controls bar ── */
+  .controls {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .filter-label {
+    font-family: 'Fira Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .filter-group input {
+    flex: 1;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'Fira Mono', monospace;
+    font-size: 12px;
+    padding: 5px 10px;
+    outline: none;
+    transition: border-color 0.15s;
+    min-width: 0;
+  }
+
+  .filter-group input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px var(--gold-glow);
+  }
+
+  .filter-group input::placeholder { color: var(--text-dim); }
+
+  .btn-clear {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-dim);
+    font-family: 'Fira Mono', monospace;
+    font-size: 11px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn-clear:hover { border-color: var(--red); color: var(--red); }
+
+  .btn-copy-url {
+    background: none;
+    border: 1px solid var(--gold-dim);
+    border-radius: var(--radius);
+    color: var(--gold);
+    font-family: 'Fira Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn-copy-url:hover { background: var(--gold-glow); }
+  .btn-copy-url.copied { color: #5cb85c; border-color: #5cb85c; }
+
+  .mode-tabs {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .mode-tab {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-family: 'Fira Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .mode-tab.active {
+    background: var(--gold-glow);
+    color: var(--gold);
+  }
+  .mode-tab:hover:not(.active) { color: var(--text); }
+
+  /* ── Main layout ── */
+  main {
+    position: relative; z-index: 5;
+    padding: 20px 24px;
+    max-width: 1400px;
+  }
+
+  #result-count {
+    font-family: 'Fira Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+  }
+
+  #result-count span { color: var(--gold); }
+
+  /* ── Shows view ── */
+  .shows-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .show-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .show-card:hover { border-color: var(--gold-dim); }
+
+  .show-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 10px 16px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+    flex-wrap: wrap;
+  }
+
+  .show-date {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+
+  .show-venue {
+    font-size: 13px;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .show-city {
+    font-family: 'Fira Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+
+  .show-tour {
+    font-family: 'Fira Mono', monospace;
+    font-size: 9px;
+    color: var(--gold-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .show-toggle {
+    font-family: 'Fira Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .show-setlist {
+    padding: 10px 16px 12px;
+  }
+
+  .song-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .song-row:last-child { border-bottom: none; }
+
+  .song-num {
+    font-family: 'Fira Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    width: 22px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .song-name {
+    font-size: 13px;
+    color: var(--text);
+    flex: 1;
+    cursor: pointer;
+    transition: color 0.1s;
+  }
+  .song-name:hover { color: var(--gold); text-decoration: underline; }
+  .song-name.highlight { color: var(--gold); font-weight: 700; }
+
+  .show-link {
+    font-family: 'Fira Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 2px 6px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    flex-shrink: 0;
+    transition: all 0.1s;
+    margin-left: auto;
+  }
+  .show-link:hover { color: var(--gold); border-color: var(--gold-dim); }
+
+  /* ── Songs view ── */
+  .songs-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .song-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .song-card:hover { border-color: var(--gold-dim); }
+
+  .song-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .song-card-title {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+    flex: 1;
+  }
+
+  .song-card-count {
+    font-family: 'Fira Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    background: var(--bg);
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .song-card-toggle {
+    font-family: 'Fira Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  .song-card-shows {
+    padding: 8px 16px 10px;
+  }
+
+  .song-show-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .song-show-row:last-child { border-bottom: none; }
+
+  .song-show-date {
+    font-family: 'Fira Mono', monospace;
+    font-size: 11px;
+    color: var(--gold-dim);
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: color 0.1s;
+  }
+  .song-show-date:hover { color: var(--gold); text-decoration: underline; }
+
+  .song-show-venue {
+    font-size: 12px;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .song-show-seq {
+    font-family: 'Fira Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+
+  /* ── Loading / error ── */
+  #loading, #error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+    font-family: 'Fira Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    position: relative; z-index: 5;
+  }
+
+  #error { color: var(--red); }
+
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid var(--border);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-right: 10px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="favicon.png" alt="BAND-MAID" onerror="this.style.display='none'">
+  <div class="header-titles">
+    <h1>BAND-MAID Okyuji</h1>
+    <div class="subtitle">Setlist Archive</div>
+  </div>
+  <div class="header-right">
+    <div id="stats"></div>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tab-shows" onclick="setMode('shows')">By Show</button>
+    <button class="mode-tab" id="tab-songs" onclick="setMode('songs')">By Song</button>
+  </div>
+
+  <div class="filter-group">
+    <span class="filter-label">Date</span>
+    <input type="text" id="filter-date" placeholder="e.g. 2026 or 2026-04-11" oninput="onFilterChange()" autocomplete="off" spellcheck="false">
+  </div>
+
+  <div class="filter-group">
+    <span class="filter-label">Song</span>
+    <input type="text" id="filter-song" placeholder="e.g. Unleash" oninput="onFilterChange()" autocomplete="off" spellcheck="false">
+  </div>
+
+  <button class="btn-clear" onclick="clearFilters()">Clear</button>
+  <button class="btn-copy-url" id="btn-copy" onclick="copyUrl()">⎘ Copy URL</button>
+</div>
+
+<div id="loading"><div class="spinner"></div>LOADING SETLISTS…</div>
+<div id="error" class="hidden"></div>
+
+<main id="main" class="hidden">
+  <div id="result-count"></div>
+  <div id="output"></div>
+</main>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+let allRows = [];
+let mode = 'shows'; // 'shows' | 'songs'
+const collapsed = new Set(); // tracks explicitly toggled cards
+
+// ── Boot ───────────────────────────────────────────────────────────────────
+async function init() {
+  // Parse URL params first
+  const params = new URLSearchParams(location.search);
+  if (params.get('date'))   document.getElementById('filter-date').value = params.get('date');
+  if (params.get('song'))   document.getElementById('filter-song').value = params.get('song');
+  if (params.get('mode'))   mode = params.get('mode') === 'songs' ? 'songs' : 'shows';
+  syncModeTabs();
+
+  try {
+    const res = await fetch('setlists.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    allRows = await res.json();
+    document.getElementById('loading').classList.add('hidden');
+    document.getElementById('main').classList.remove('hidden');
+    updateStats();
+    render();
+  } catch(e) {
+    document.getElementById('loading').classList.add('hidden');
+    const err = document.getElementById('error');
+    err.classList.remove('hidden');
+    err.textContent = 'Failed to load setlists.json — ' + e.message;
+  }
+}
+
+// ── Filtering ──────────────────────────────────────────────────────────────
+function getFilters() {
+  return {
+    date: document.getElementById('filter-date').value.trim(),
+    song: document.getElementById('filter-song').value.trim()
+  };
+}
+
+function applyFilters() {
+  const { date, song } = getFilters();
+  return allRows.filter(r => {
+    const dateOk = !date || r.Date.includes(date);
+    const songOk = !song || r.Song.toLowerCase().includes(song.toLowerCase());
+    return dateOk && songOk;
+  });
+}
+
+function clearFilters() {
+  document.getElementById('filter-date').value = '';
+  document.getElementById('filter-song').value = '';
+  collapsed.clear();
+  render();
+  pushState();
+}
+
+function onFilterChange() {
+  collapsed.clear();
+  render();
+  pushState();
+}
+
+// ── URL state ─────────────────────────────────────────────────────────────
+function pushState() {
+  const { date, song } = getFilters();
+  const params = new URLSearchParams();
+  if (mode !== 'shows') params.set('mode', mode);
+  if (date) params.set('date', date);
+  if (song) params.set('song', song);
+  const qs = params.toString();
+  history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+}
+
+function copyUrl() {
+  const btn = document.getElementById('btn-copy');
+  navigator.clipboard.writeText(location.href).then(() => {
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '⎘ Copy URL'; btn.classList.remove('copied'); }, 1800);
+  });
+}
+
+// ── Mode ──────────────────────────────────────────────────────────────────
+function setMode(m) {
+  mode = m;
+  collapsed.clear();
+  syncModeTabs();
+  render();
+  pushState();
+}
+
+function syncModeTabs() {
+  document.getElementById('tab-shows').classList.toggle('active', mode === 'shows');
+  document.getElementById('tab-songs').classList.toggle('active', mode === 'songs');
+}
+
+// ── Stats ─────────────────────────────────────────────────────────────────
+function updateStats() {
+  const shows = new Set(allRows.map(r => r.SetId)).size;
+  const songs = new Set(allRows.map(r => r.Song)).size;
+  document.getElementById('stats').innerHTML =
+    `${shows} shows &nbsp;·&nbsp; ${songs} unique songs`;
+}
+
+// ── Render dispatcher ─────────────────────────────────────────────────────
+function render() {
+  const filtered = applyFilters();
+  const { date, song } = getFilters();
+  const out = document.getElementById('output');
+
+  if (mode === 'shows') {
+    renderShows(filtered, out, song);
+    const setIds = new Set(filtered.map(r => r.SetId));
+    document.getElementById('result-count').innerHTML =
+      `<span>${setIds.size}</span> show${setIds.size !== 1 ? 's' : ''} &nbsp;·&nbsp; <span>${filtered.length}</span> song performances`;
+  } else {
+    renderSongs(filtered, out, date);
+    const songNames = new Set(filtered.map(r => r.Song));
+    document.getElementById('result-count').innerHTML =
+      `<span>${songNames.size}</span> unique song${songNames.size !== 1 ? 's' : ''} &nbsp;·&nbsp; across <span>${new Set(filtered.map(r=>r.SetId)).size}</span> shows`;
+  }
+}
+
+// ── Shows view ────────────────────────────────────────────────────────────
+function renderShows(rows, container, songHighlight) {
+  // Group by SetId, preserving order of first appearance
+  const showMap = new Map();
+  for (const r of rows) {
+    if (!showMap.has(r.SetId)) showMap.set(r.SetId, { meta: r, songs: [] });
+    showMap.get(r.SetId).songs.push(r);
+  }
+
+  const cards = [];
+  for (const [setId, { meta, songs }] of showMap) {
+    songs.sort((a, b) => a.Sequence - b.Sequence);
+    const cardId = 'show-' + setId;
+    const isOpen = !collapsed.has(cardId);
+
+    const songRows = songs.map(s => {
+      const hl = songHighlight && s.Song.toLowerCase().includes(songHighlight.toLowerCase());
+      return `<div class="song-row">
+        <span class="song-num">${s.Sequence}</span>
+        <span class="song-name${hl ? ' highlight' : ''}" title="Filter by song" onclick="filterBySong(${JSON.stringify(s.Song)})">${escHtml(s.Song)}</span>
+      </div>`;
+    }).join('');
+
+    const sfUrl = meta.URL || '';
+
+    cards.push(`<div class="show-card" id="${cardId}">
+      <div class="show-header" onclick="toggleCard('${cardId}')">
+        <span class="show-date">${meta.Date}</span>
+        <span class="show-venue">${escHtml(meta.Venue)}</span>
+        <span class="show-city">${escHtml(meta.City)}${meta.Country ? ', ' + meta.Country : ''}</span>
+        ${meta.Tour ? `<span class="show-tour">${escHtml(meta.Tour)}</span>` : ''}
+        ${sfUrl ? `<a class="show-link" href="${escHtml(sfUrl)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">setlist.fm ↗</a>` : ''}
+        <span class="show-toggle">${isOpen ? '▲' : '▼'} ${songs.length} songs</span>
+      </div>
+      <div class="show-setlist${isOpen ? '' : ' hidden'}">${songRows}</div>
+    </div>`);
+  }
+
+  container.innerHTML = `<div class="shows-grid">${cards.join('')}</div>`;
+}
+
+// ── Songs view ────────────────────────────────────────────────────────────
+function renderSongs(rows, container, dateHighlight) {
+  // Group by song name
+  const songMap = new Map();
+  for (const r of rows) {
+    if (!songMap.has(r.Song)) songMap.set(r.Song, []);
+    songMap.get(r.Song).push(r);
+  }
+  // Sort songs alphabetically
+  const sorted = [...songMap.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+
+  const cards = sorted.map(([songName, shows]) => {
+    shows.sort((a, b) => a.Date.localeCompare(b.Date) || a.Sequence - b.Sequence);
+    const cardId = 'song-' + songName.replace(/\W+/g, '_');
+    const isOpen = !collapsed.has(cardId);
+
+    const showRows = shows.map(s => {
+      const hl = dateHighlight && s.Date.includes(dateHighlight);
+      return `<div class="song-show-row">
+        <span class="song-show-date${hl ? ' highlight' : ''}" title="Filter by date" onclick="filterByDate(${JSON.stringify(s.Date)})">${s.Date}</span>
+        <span class="song-show-venue">${escHtml(s.Venue)}${s.City ? ' · ' + escHtml(s.City) : ''}</span>
+        <span class="song-show-seq">#${s.Sequence}</span>
+      </div>`;
+    }).join('');
+
+    return `<div class="song-card" id="${escHtml(cardId)}">
+      <div class="song-card-header" onclick="toggleCard('${cardId}')">
+        <span class="song-card-title">${escHtml(songName)}</span>
+        <span class="song-card-count">${shows.length}×</span>
+        <span class="song-card-toggle">${isOpen ? '▲' : '▼'}</span>
+      </div>
+      <div class="song-card-shows${isOpen ? '' : ' hidden'}">${showRows}</div>
+    </div>`;
+  }).join('');
+
+  container.innerHTML = `<div class="songs-grid">${cards}</div>`;
+}
+
+// ── Interactions ──────────────────────────────────────────────────────────
+function toggleCard(id) {
+  if (collapsed.has(id)) collapsed.delete(id);
+  else collapsed.add(id);
+  render();
+}
+
+function filterBySong(name) {
+  document.getElementById('filter-song').value = name;
+  document.getElementById('filter-date').value = '';
+  collapsed.clear();
+  render();
+  pushState();
+}
+
+function filterByDate(date) {
+  document.getElementById('filter-date').value = date;
+  document.getElementById('filter-song').value = '';
+  collapsed.clear();
+  render();
+  pushState();
+}
+
+// ── Utils ─────────────────────────────────────────────────────────────────
+function escHtml(str) {
+  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Go ─────────────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
