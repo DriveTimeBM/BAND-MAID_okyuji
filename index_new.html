@@ -499,8 +499,8 @@ const collapsed = new Set(); // tracks explicitly toggled cards
 
 // ── Boot ───────────────────────────────────────────────────────────────────
 async function init() {
-  // Parse URL params first
-  const params = new URLSearchParams(location.search);
+  // Parse hash params: #date=2026-04-11&song=Unleash&mode=songs
+  const params = new URLSearchParams(location.hash.replace(/^#/, ''));
   if (params.get('date'))   document.getElementById('filter-date').value = params.get('date');
   if (params.get('song'))   document.getElementById('filter-song').value = params.get('song');
   if (params.get('mode'))   mode = params.get('mode') === 'songs' ? 'songs' : 'shows';
@@ -561,7 +561,7 @@ function pushState() {
   if (date) params.set('date', date);
   if (song) params.set('song', song);
   const qs = params.toString();
-  history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+  location.replace((location.pathname + location.search + (qs ? '#' + qs : '#')));
 }
 
 function copyUrl() {
@@ -633,7 +633,7 @@ function renderShows(rows, container, songHighlight) {
       const hl = songHighlight && s.Song.toLowerCase().includes(songHighlight.toLowerCase());
       return `<div class="song-row">
         <span class="song-num">${s.Sequence}</span>
-        <span class="song-name${hl ? ' highlight' : ''}" title="Filter by song" onclick="filterBySong(${JSON.stringify(s.Song)})">${escHtml(s.Song)}</span>
+        <span class="song-name${hl ? ' highlight' : ''}" title="Filter by song" onclick="event.stopPropagation();filterBySong(${JSON.stringify(s.Song)})">${escHtml(s.Song)}</span>
       </div>`;
     }).join('');
 
@@ -674,7 +674,7 @@ function renderSongs(rows, container, dateHighlight) {
     const showRows = shows.map(s => {
       const hl = dateHighlight && s.Date.includes(dateHighlight);
       return `<div class="song-show-row">
-        <span class="song-show-date${hl ? ' highlight' : ''}" title="Filter by date" onclick="filterByDate(${JSON.stringify(s.Date)})">${s.Date}</span>
+        <span class="song-show-date${hl ? ' highlight' : ''}" title="Filter by date" onclick="event.stopPropagation();filterByDate(${JSON.stringify(s.Date)})">${s.Date}</span>
         <span class="song-show-venue">${escHtml(s.Venue)}${s.City ? ' · ' + escHtml(s.City) : ''}</span>
         <span class="song-show-seq">#${s.Sequence}</span>
       </div>`;
