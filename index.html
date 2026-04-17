@@ -3,151 +3,493 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>All BAND-MAID Setlists</title>
-<link rel="icon" type="image/png" href="favicon.png">
+<title>BAND-MAID Okyuji — Setlists</title>
+<link rel="icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Fira+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #111;
-  color: #eee;
-  margin: 20px;
-}
-input[type="text"] {
-  width: 100%;
-  max-width: 400px;
-  padding: 8px;
-  margin-bottom: 10px;
-  font-size: 14px;
-  border: 1px solid #444;
-  border-radius: 4px;
-  background: #222;
-  color: #eee;
-}
-.okyuji {
-  margin-bottom: 5px;
-  padding: 5px;
-  border: 1px solid #444;
-  border-radius: 5px;
-}
-.okyuji-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  font-weight: bold;
-  background: #222;
-  padding: 5px;
-  border-radius: 5px;
-}
-.okyuji-header:hover {
-  background: #333;
-}
-.setlist {
-  margin-top: 5px;
-  margin-left: 20px;
-  display: none;
-}
-.setlist li {
-  list-style: none;
-  padding: 2px 0;
-}
-.link {
-  color: #66ccff;
-  text-decoration: none;
-}
-.link:hover {
-  text-decoration: underline;
-}
-.hidden {
-  display: none !important;
-}
+  :root {
+    --gold:      #c8a96e;
+    --gold-dim:  #8a6e3e;
+    --gold-glow: rgba(200,169,110,0.18);
+    --bg:        #0d0d0e;
+    --bg2:       #131316;
+    --bg3:       #1a1a1f;
+    --border:    #2a2a32;
+    --text:      #d8d4cc;
+    --text-dim:  #7a7470;
+    --red:       #c0392b;
+    --radius:    4px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Libre Baskerville', Georgia, serif;
+    font-size: 14px;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+  header {
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #0a0a0b 0%, var(--bg) 100%);
+    padding: 16px 24px 12px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  header img { width: 38px; height: 38px; object-fit: contain; flex-shrink: 0; }
+  .header-titles h1 {
+    font-family: 'Cinzel', serif; font-size: 17px; font-weight: 900;
+    letter-spacing: 0.12em; color: var(--gold); line-height: 1.1;
+  }
+  .header-titles .subtitle {
+    font-family: 'Fira Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; color: var(--text-dim); text-transform: uppercase;
+  }
+  #stats {
+    margin-left: auto;
+    font-family: 'Fira Mono', monospace; font-size: 10px;
+    color: var(--text-dim); letter-spacing: 0.08em; text-align: right; line-height: 1.5;
+  }
+  .controls {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--bg2); border-bottom: 1px solid var(--border);
+    padding: 8px 24px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  }
+  .mode-tabs { display: flex; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .mode-tab {
+    background: none; border: none; color: var(--text-dim);
+    font-family: 'Fira Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 5px 12px; cursor: pointer; transition: all 0.15s;
+  }
+  .mode-tab.active { background: var(--gold-glow); color: var(--gold); }
+  .mode-tab:hover:not(.active) { color: var(--text); }
+  .filter-group { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 180px; }
+  .filter-label {
+    font-family: 'Fira Mono', monospace; font-size: 10px;
+    letter-spacing: 0.12em; color: var(--gold-dim); text-transform: uppercase; white-space: nowrap;
+  }
+  .filter-group input {
+    flex: 1; min-width: 0; background: var(--bg3);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    color: var(--text); font-family: 'Fira Mono', monospace; font-size: 12px;
+    padding: 5px 10px; outline: none; transition: border-color 0.15s;
+  }
+  .filter-group input:focus { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold-glow); }
+  .filter-group input::placeholder { color: var(--text-dim); }
+  .btn {
+    background: none; border-radius: var(--radius);
+    font-family: 'Fira Mono', monospace; font-size: 10px;
+    padding: 5px 12px; cursor: pointer; transition: all 0.15s; white-space: nowrap;
+  }
+  #btn-clear { border: 1px solid var(--border); color: var(--text-dim); }
+  #btn-clear:hover { border-color: var(--red); color: var(--red); }
+  #btn-copy  { border: 1px solid var(--gold-dim); color: var(--gold); letter-spacing: 0.08em; }
+  #btn-copy:hover  { background: var(--gold-glow); }
+  #btn-copy.copied { color: #5cb85c; border-color: #5cb85c; }
+  main { padding: 18px 24px; max-width: 1400px; }
+  #result-count {
+    font-family: 'Fira Mono', monospace; font-size: 10px;
+    color: var(--text-dim); letter-spacing: 0.1em; margin-bottom: 14px;
+  }
+  #result-count em { font-style: normal; color: var(--gold); }
+  .shows-grid { display: flex; flex-direction: column; gap: 12px; }
+  .show-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden; transition: border-color 0.15s;
+  }
+  .show-card:hover { border-color: var(--gold-dim); }
+  .show-header {
+    display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+    padding: 9px 14px; background: var(--bg3); border-bottom: 1px solid var(--border);
+    cursor: pointer; user-select: none;
+  }
+  .show-date { font-family: 'Cinzel', serif; font-size: 13px; font-weight: 600; color: var(--gold); flex-shrink: 0; }
+  .show-venue { font-size: 13px; color: var(--text); flex: 1; }
+  .show-city  { font-family: 'Fira Mono', monospace; font-size: 10px; color: var(--text-dim); }
+  .show-tour  { font-family: 'Fira Mono', monospace; font-size: 9px; color: var(--gold-dim); text-transform: uppercase; }
+  .show-toggle { font-family: 'Fira Mono', monospace; font-size: 10px; color: var(--text-dim); margin-left: auto; flex-shrink: 0; }
+  .sf-link {
+    font-family: 'Fira Mono', monospace; font-size: 9px; color: var(--text-dim);
+    text-decoration: none; padding: 2px 6px; border: 1px solid var(--border); border-radius: 2px;
+  }
+  .sf-link:hover { color: var(--gold); border-color: var(--gold-dim); }
+  .show-setlist { padding: 8px 14px 10px; }
+  .song-row {
+    display: flex; align-items: center; gap: 8px; padding: 3px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .song-row:last-child { border-bottom: none; }
+  .song-num { font-family: 'Fira Mono', monospace; font-size: 10px; color: var(--text-dim); width: 20px; text-align: right; flex-shrink: 0; }
+  .song-name { font-size: 13px; color: var(--text); flex: 1; cursor: pointer; transition: color 0.1s; }
+  .song-name:hover { color: var(--gold); text-decoration: underline; }
+  .song-name.hl { color: var(--gold); font-weight: 700; }
+  .songs-grid { display: flex; flex-direction: column; gap: 10px; }
+  .song-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden; transition: border-color 0.15s;
+  }
+  .song-card:hover { border-color: var(--gold-dim); }
+  .song-card-header {
+    display: flex; align-items: center; gap: 10px; padding: 9px 14px;
+    background: var(--bg3); border-bottom: 1px solid var(--border);
+    cursor: pointer; user-select: none;
+  }
+  .song-card-title { font-family: 'Cinzel', serif; font-size: 13px; font-weight: 600; color: var(--gold); flex: 1; }
+  .song-card-count {
+    font-family: 'Fira Mono', monospace; font-size: 10px; color: var(--text-dim);
+    background: var(--bg); padding: 2px 8px; border-radius: 10px; border: 1px solid var(--border);
+  }
+  .song-card-toggle { font-family: 'Fira Mono', monospace; font-size: 10px; color: var(--text-dim); }
+  .song-card-shows { padding: 8px 14px 10px; }
+  .show-row {
+    display: flex; align-items: center; gap: 10px; padding: 3px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .show-row:last-child { border-bottom: none; }
+  .show-row-date {
+    font-family: 'Fira Mono', monospace; font-size: 11px; color: var(--gold-dim);
+    flex-shrink: 0; cursor: pointer; transition: color 0.1s;
+  }
+  .show-row-date:hover { color: var(--gold); text-decoration: underline; }
+  .show-row-date.hl { color: var(--gold); font-weight: 700; }
+  .show-row-venue { font-size: 12px; color: var(--text); flex: 1; }
+  .show-row-seq   { font-family: 'Fira Mono', monospace; font-size: 10px; color: var(--text-dim); flex-shrink: 0; }
+  .body-hidden { display: none; }
+  #loading, #error {
+    display: flex; align-items: center; justify-content: center; padding: 60px 24px;
+    font-family: 'Fira Mono', monospace; font-size: 12px; color: var(--text-dim); letter-spacing: 0.1em;
+  }
+  #error { color: var(--red); }
+  .spinner {
+    width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--gold);
+    border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 10px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .hidden { display: none !important; }
 </style>
 </head>
 <body>
 
-<h1>All BAND-MAID Setlists</h1>
-<iframe src="https://www.google.com/maps/d/embed?mid=1-hUU-25MYERexy7XrFTF_vi1S9l550Q1&ehbc=2E312F" width="640" height="480"></iframe>
-<input id="songFilter" type="text" placeholder="Filter by song title..." />
-<div id="setlists"></div>
+<header>
+  <img src="favicon.png" alt="" onerror="this.style.display='none'">
+  <div class="header-titles">
+    <h1>BAND-MAID Okyuji</h1>
+    <div class="subtitle">Setlist Archive</div>
+  </div>
+  <div id="stats"></div>
+</header>
+
+<div class="controls">
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tab-shows">By Show</button>
+    <button class="mode-tab"        id="tab-songs">By Song</button>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Date</span>
+    <input type="text" id="filter-date" placeholder="e.g. 2026 or 2026-04-11" autocomplete="off" spellcheck="false">
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Song</span>
+    <input type="text" id="filter-song" placeholder="e.g. Unleash" autocomplete="off" spellcheck="false">
+  </div>
+  <button class="btn" id="btn-clear">Clear</button>
+  <button class="btn" id="btn-copy">⎘ Copy URL</button>
+</div>
+
+<div id="loading"><div class="spinner"></div>LOADING SETLISTS…</div>
+<div id="error" class="hidden"></div>
+<main id="main" class="hidden">
+  <div id="result-count"></div>
+  <div id="output"></div>
+</main>
 
 <script>
-let grouped = new Map();
+'use strict';
 
-fetch('setlists.json')
-  .then(r => r.json())
-  .then(data => {
-    // Sort by Date DESC, then Sequence ASC
-    data.sort((a, b) => {
-      if (a.Date !== b.Date) return b.Date.localeCompare(a.Date);
-      return a.Sequence - b.Sequence;
+var allRows  = [];
+var viewMode = 'shows';
+var collapsed = {};
+
+var elDate    = document.getElementById('filter-date');
+var elSong    = document.getElementById('filter-song');
+var elOutput  = document.getElementById('output');
+var elCount   = document.getElementById('result-count');
+var elStats   = document.getElementById('stats');
+var elMain    = document.getElementById('main');
+var elLoading = document.getElementById('loading');
+var elError   = document.getElementById('error');
+var tabShows  = document.getElementById('tab-shows');
+var tabSongs  = document.getElementById('tab-songs');
+
+// ── Boot ───────────────────────────────────────────────────────────────────
+function init() {
+  var p = new URLSearchParams(location.search);
+  if (p.get('date')) elDate.value = p.get('date');
+  if (p.get('song')) elSong.value = p.get('song');
+  if (p.get('mode') === 'songs') viewMode = 'songs';
+  syncTabs();
+
+  elDate.addEventListener('input', onInput);
+  elSong.addEventListener('input', onInput);
+  tabShows.addEventListener('click', function() { switchMode('shows'); });
+  tabSongs.addEventListener('click', function() { switchMode('songs'); });
+  document.getElementById('btn-clear').addEventListener('click', clearFilters);
+  document.getElementById('btn-copy').addEventListener('click', copyUrl);
+  elOutput.addEventListener('click', handleClick);
+
+  fetch('setlists.json')
+    .then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function(data) {
+      allRows = data;
+      elLoading.classList.add('hidden');
+      elMain.classList.remove('hidden');
+      var showCount = countUnique(allRows, 'SetId');
+      var songCount = countUnique(allRows, 'Song');
+      elStats.innerHTML = showCount + ' shows &nbsp;&middot;&nbsp; ' + songCount + ' unique songs';
+      render();
+    })
+    .catch(function(e) {
+      elLoading.classList.add('hidden');
+      elError.classList.remove('hidden');
+      elError.textContent = 'Failed to load setlists.json — ' + e.message;
     });
+}
 
-    // Group preserving order
-    data.forEach(item => {
-      if (!grouped.has(item.SetId)) grouped.set(item.SetId, []);
-      grouped.get(item.SetId).push(item);
-    });
+function countUnique(rows, key) {
+  var seen = {};
+  rows.forEach(function(r) { seen[r[key]] = 1; });
+  return Object.keys(seen).length;
+}
 
-    renderSets();
-  })
-  .catch(err => {
-    console.error('Error loading setlists:', err);
-    document.getElementById('setlists').textContent = 'Failed to load setlists.';
-  });
+// ── Click delegation ───────────────────────────────────────────────────────
+function handleClick(e) {
+  // Song name click → filter by song
+  var songEl = closest(e.target, '.song-name');
+  if (songEl) {
+    elSong.value = songEl.getAttribute('data-song');
+    elDate.value = '';
+    collapsed = {};
+    render();
+    saveUrl();
+    return;
+  }
 
-function renderSets(filter = '') {
-  const container = document.getElementById('setlists');
-  container.innerHTML = '';
+  // Date click → filter by date
+  var dateEl = closest(e.target, '.show-row-date');
+  if (dateEl) {
+    elDate.value = dateEl.getAttribute('data-date');
+    elSong.value = '';
+    collapsed = {};
+    render();
+    saveUrl();
+    return;
+  }
 
-  for (const set of grouped.values()) {
-    const first = set[0];
-    const date = first.Date;
-    const headerText = `${date} ${first.City} ${first.Country} ${first.Venue}`;
-
-    // Filter logic
-    const songs = set.map(s => s.Song.toLowerCase());
-    const match = !filter || songs.some(s => s.includes(filter.toLowerCase()));
-    if (!match) continue;
-
-    const wrapper = document.createElement('div');
-    wrapper.className = 'okyuji';
-
-    const header = document.createElement('div');
-    header.className = 'okyuji-header';
-    header.textContent = headerText;
-
-    const link = document.createElement('a');
-    link.href = first.URL;
-    link.textContent = 'Setlist.fm';
-    link.className = 'link';
-    link.target = '_blank';
-    link.onclick = e => e.stopPropagation();
-
-    header.appendChild(link);
-
-    const list = document.createElement('ul');
-    list.className = 'setlist';
-    set.forEach(song => {
-      const li = document.createElement('li');
-      li.textContent = `${song.Sequence}. ${song.Song}`;
-      list.appendChild(li);
-    });
-
-    header.addEventListener('click', () => {
-      list.style.display = list.style.display === 'block' ? 'none' : 'block';
-    });
-
-    wrapper.appendChild(header);
-    wrapper.appendChild(list);
-    container.appendChild(wrapper);
+  // Card header click → toggle collapse (skip if clicking a link)
+  if (closest(e.target, 'a')) return;
+  var header = closest(e.target, '.show-header, .song-card-header');
+  if (header) {
+    var card = header.parentElement;
+    var id   = card.getAttribute('data-id');
+    var body = card.querySelector('.show-setlist, .song-card-shows');
+    var arrow = header.querySelector('.toggle-arrow');
+    if (collapsed[id]) {
+      delete collapsed[id];
+      body.style.display = '';
+      if (arrow) arrow.textContent = '▲';
+    } else {
+      collapsed[id] = true;
+      body.style.display = 'none';
+      if (arrow) arrow.textContent = '▼';
+    }
   }
 }
 
-// Live filter
-document.getElementById('songFilter').addEventListener('input', e => {
-  renderSets(e.target.value.trim());
-});
-</script>
+// Walks up the DOM to find a matching selector (like element.closest but IE-safe)
+function closest(el, sel) {
+  var selectors = sel.split(',').map(function(s) { return s.trim(); });
+  while (el && el !== document) {
+    for (var i = 0; i < selectors.length; i++) {
+      if (el.matches && el.matches(selectors[i])) return el;
+    }
+    el = el.parentElement;
+  }
+  return null;
+}
 
+// ── Filter / input ─────────────────────────────────────────────────────────
+function onInput() {
+  collapsed = {};
+  render();
+  saveUrl();
+}
+
+function clearFilters() {
+  elDate.value = '';
+  elSong.value = '';
+  collapsed = {};
+  render();
+  saveUrl();
+}
+
+function getFilters() {
+  return { date: elDate.value.trim(), song: elSong.value.trim() };
+}
+
+function filtered() {
+  var f = getFilters();
+  return allRows.filter(function(r) {
+    var dateOk = !f.date || r.Date.indexOf(f.date) !== -1;
+    var songOk = !f.song || r.Song.toLowerCase().indexOf(f.song.toLowerCase()) !== -1;
+    return dateOk && songOk;
+  });
+}
+
+// ── URL ────────────────────────────────────────────────────────────────────
+function saveUrl() {
+  var f  = getFilters();
+  var p  = new URLSearchParams();
+  if (viewMode !== 'shows') p.set('mode', viewMode);
+  if (f.date) p.set('date', f.date);
+  if (f.song) p.set('song', f.song);
+  var qs = p.toString();
+  history.replaceState(null, '', location.pathname + (qs ? '?' + qs : ''));
+}
+
+function copyUrl() {
+  var btn = document.getElementById('btn-copy');
+  navigator.clipboard.writeText(location.href).then(function() {
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = '⎘ Copy URL'; btn.classList.remove('copied'); }, 1800);
+  });
+}
+
+// ── Mode ──────────────────────────────────────────────────────────────────
+function switchMode(m) {
+  viewMode = m;
+  collapsed = {};
+  syncTabs();
+  render();
+  saveUrl();
+}
+
+function syncTabs() {
+  tabShows.classList.toggle('active', viewMode === 'shows');
+  tabSongs.classList.toggle('active', viewMode === 'songs');
+}
+
+// ── Render ─────────────────────────────────────────────────────────────────
+function render() {
+  var rows = filtered();
+  var f    = getFilters();
+  if (viewMode === 'shows') {
+    renderShows(rows, f.song);
+    var sc = countUnique(rows, 'SetId');
+    elCount.innerHTML = '<em>' + sc + '</em> show' + (sc !== 1 ? 's' : '') + ' &nbsp;&middot;&nbsp; <em>' + rows.length + '</em> song performances';
+  } else {
+    renderSongs(rows, f.date);
+    var uc = countUnique(rows, 'Song');
+    var nc = countUnique(rows, 'SetId');
+    elCount.innerHTML = '<em>' + uc + '</em> unique song' + (uc !== 1 ? 's' : '') + ' &nbsp;&middot;&nbsp; across <em>' + nc + '</em> shows';
+  }
+}
+
+// ── Shows view ─────────────────────────────────────────────────────────────
+function renderShows(rows, songFilter) {
+  var showMap = {};
+  var order   = [];
+  rows.forEach(function(r) {
+    if (!showMap[r.SetId]) { showMap[r.SetId] = { meta: r, songs: [] }; order.push(r.SetId); }
+    showMap[r.SetId].songs.push(r);
+  });
+
+  var html = '<div class="shows-grid">';
+  order.forEach(function(setId) {
+    var entry = showMap[setId];
+    var meta  = entry.meta;
+    var songs = entry.songs.slice().sort(function(a, b) { return a.Sequence - b.Sequence; });
+    var id    = 'show-' + setId;
+    var open  = !collapsed[id];
+
+    var songRows = songs.map(function(s) {
+      var hl = songFilter && s.Song.toLowerCase().indexOf(songFilter.toLowerCase()) !== -1;
+      return '<div class="song-row">'
+        + '<span class="song-num">' + s.Sequence + '</span>'
+        + '<span class="song-name' + (hl ? ' hl' : '') + '" data-song="' + esc(s.Song) + '" title="Filter by this song">' + esc(s.Song) + '</span>'
+        + '</div>';
+    }).join('');
+
+    var sfLink = meta.URL ? '<a class="sf-link" href="' + esc(meta.URL) + '" target="_blank" rel="noopener">setlist.fm &#x2197;</a>' : '';
+    var tour   = meta.Tour ? '<span class="show-tour">' + esc(meta.Tour) + '</span>' : '';
+
+    html += '<div class="show-card" data-id="' + id + '">'
+      + '<div class="show-header">'
+        + '<span class="show-date">'  + esc(meta.Date)   + '</span>'
+        + '<span class="show-venue">' + esc(meta.Venue)  + '</span>'
+        + '<span class="show-city">'  + esc(meta.City)   + (meta.Country ? ', ' + esc(meta.Country) : '') + '</span>'
+        + tour + sfLink
+        + '<span class="show-toggle"><span class="toggle-arrow">' + (open ? '▲' : '▼') + '</span> ' + songs.length + ' songs</span>'
+      + '</div>'
+      + '<div class="show-setlist" style="' + (open ? '' : 'display:none') + '">' + songRows + '</div>'
+      + '</div>';
+  });
+  html += '</div>';
+  elOutput.innerHTML = html;
+}
+
+// ── Songs view ─────────────────────────────────────────────────────────────
+function renderSongs(rows, dateFilter) {
+  var songMap = {};
+  var order   = [];
+  rows.forEach(function(r) {
+    if (!songMap[r.Song]) { songMap[r.Song] = []; order.push(r.Song); }
+    songMap[r.Song].push(r);
+  });
+  order.sort(function(a, b) { return a.localeCompare(b); });
+
+  var html = '<div class="songs-grid">';
+  order.forEach(function(songName) {
+    var shows = songMap[songName].slice().sort(function(a, b) { return a.Date.localeCompare(b.Date); });
+    var id    = 'song-' + songName.replace(/\W+/g, '_');
+    var open  = !collapsed[id];
+
+    var showRows = shows.map(function(s) {
+      var hl = dateFilter && s.Date.indexOf(dateFilter) !== -1;
+      return '<div class="show-row">'
+        + '<span class="show-row-date' + (hl ? ' hl' : '') + '" data-date="' + esc(s.Date) + '" title="Filter by this date">' + esc(s.Date) + '</span>'
+        + '<span class="show-row-venue">' + esc(s.Venue) + (s.City ? ' &middot; ' + esc(s.City) : '') + '</span>'
+        + '<span class="show-row-seq">#' + s.Sequence + '</span>'
+        + '</div>';
+    }).join('');
+
+    html += '<div class="song-card" data-id="' + id + '">'
+      + '<div class="song-card-header">'
+        + '<span class="song-card-title">'  + esc(songName)    + '</span>'
+        + '<span class="song-card-count">'  + shows.length + '&times;</span>'
+        + '<span class="song-card-toggle"><span class="toggle-arrow">' + (open ? '▲' : '▼') + '</span></span>'
+      + '</div>'
+      + '<div class="song-card-shows" style="' + (open ? '' : 'display:none') + '">' + showRows + '</div>'
+      + '</div>';
+  });
+  html += '</div>';
+  elOutput.innerHTML = html;
+}
+
+// ── Utils ──────────────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+init();
+</script>
 </body>
 </html>
