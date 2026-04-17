@@ -82,8 +82,10 @@
     font-family: 'Fira Mono', monospace; font-size: 10px;
     padding: 5px 12px; cursor: pointer; transition: all 0.15s; white-space: nowrap;
   }
-  #btn-clear { border: 1px solid var(--border); color: var(--text-dim); }
+  #btn-clear    { border: 1px solid var(--border); color: var(--text-dim); }
   #btn-clear:hover { border-color: var(--red); color: var(--red); }
+  #btn-collapse, #btn-expand { border: 1px solid var(--border); color: var(--text-dim); }
+  #btn-collapse:hover, #btn-expand:hover { border-color: var(--gold-dim); color: var(--gold); }
   #btn-copy  { border: 1px solid var(--gold-dim); color: var(--gold); letter-spacing: 0.08em; }
   #btn-copy:hover  { background: var(--gold-glow); }
   #btn-copy.copied { color: #5cb85c; border-color: #5cb85c; }
@@ -194,6 +196,8 @@
     <input type="text" id="filter-song" placeholder="e.g. Unleash" autocomplete="off" spellcheck="false">
   </div>
   <button class="btn" id="btn-clear">Clear</button>
+  <button class="btn" id="btn-collapse">Collapse All</button>
+  <button class="btn" id="btn-expand">Expand All</button>
   <button class="btn" id="btn-copy">⎘ Copy URL</button>
 </div>
 
@@ -235,6 +239,8 @@ function init() {
   tabShows.addEventListener('click', function() { switchMode('shows'); });
   tabSongs.addEventListener('click', function() { switchMode('songs'); });
   document.getElementById('btn-clear').addEventListener('click', clearFilters);
+  document.getElementById('btn-collapse').addEventListener('click', collapseAll);
+  document.getElementById('btn-expand').addEventListener('click', expandAll);
   document.getElementById('btn-copy').addEventListener('click', copyUrl);
   elOutput.addEventListener('click', handleClick);
 
@@ -346,6 +352,28 @@ function filtered() {
     var dateOk = !f.date || r.Date.indexOf(f.date) !== -1;
     var songOk = !f.song || r.Song.toLowerCase().indexOf(f.song.toLowerCase()) !== -1;
     return dateOk && songOk;
+  });
+}
+
+function collapseAll() {
+  elOutput.querySelectorAll('.show-card, .song-card').forEach(function(card) {
+    var id   = card.getAttribute('data-id');
+    var body = card.querySelector('.show-setlist, .song-card-shows');
+    var arrow = card.querySelector('.toggle-arrow');
+    collapsed[id] = true;
+    if (body)  body.style.display = 'none';
+    if (arrow) arrow.textContent  = '▼';
+  });
+}
+
+function expandAll() {
+  elOutput.querySelectorAll('.show-card, .song-card').forEach(function(card) {
+    var id   = card.getAttribute('data-id');
+    var body = card.querySelector('.show-setlist, .song-card-shows');
+    var arrow = card.querySelector('.toggle-arrow');
+    delete collapsed[id];
+    if (body)  body.style.display = '';
+    if (arrow) arrow.textContent  = '▲';
   });
 }
 
