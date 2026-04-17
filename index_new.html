@@ -561,7 +561,7 @@ function pushState() {
   if (date) params.set('date', date);
   if (song) params.set('song', song);
   const qs = params.toString();
-  location.replace((location.pathname + location.search + (qs ? '#' + qs : '#')));
+  history.replaceState(null, '', location.pathname + location.search + (qs ? '#' + qs : ''));
 }
 
 function copyUrl() {
