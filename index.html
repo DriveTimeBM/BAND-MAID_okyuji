@@ -138,6 +138,11 @@
     cursor: pointer; user-select: none;
   }
   .song-card-title { font-family: 'Cinzel', serif; font-size: 13px; font-weight: 600; color: var(--gold); flex: 1; }
+  .song-card-rank {
+    font-family: 'Fira Mono', monospace; font-size: 10px; color: var(--text-dim);
+    width: 32px; text-align: right; flex-shrink: 0;
+  }
+  .song-card-rank.top3 { color: var(--gold); font-weight: 700; }
   .song-card-count {
     font-family: 'Fira Mono', monospace; font-size: 10px; color: var(--text-dim);
     background: var(--bg); padding: 2px 8px; border-radius: 10px; border: 1px solid var(--border);
@@ -478,13 +483,30 @@ function renderSongs(rows, dateFilter) {
     if (!songMap[r.Song]) { songMap[r.Song] = []; order.push(r.Song); }
     songMap[r.Song].push(r);
   });
-  order.sort(function(a, b) { return a.localeCompare(b); });
+
+  // Sort by play count descending, then alphabetically as tiebreaker
+  order.sort(function(a, b) {
+    var diff = songMap[b].length - songMap[a].length;
+    return diff !== 0 ? diff : a.localeCompare(b);
+  });
+
+  // Assign ranks — tied songs share the same rank number
+  var ranks = {};
+  var rank = 1;
+  for (var i = 0; i < order.length; i++) {
+    if (i > 0 && songMap[order[i]].length < songMap[order[i - 1]].length) {
+      rank = i + 1;
+    }
+    ranks[order[i]] = rank;
+  }
 
   var html = '<div class="songs-grid">';
   order.forEach(function(songName) {
     var shows = songMap[songName].slice().sort(function(a, b) { return a.Date.localeCompare(b.Date); });
     var id    = 'song-' + songName.replace(/\W+/g, '_');
     var open  = !collapsed[id];
+    var r     = ranks[songName];
+    var isTop3 = r <= 3;
 
     var showRows = shows.map(function(s) {
       var hl = dateFilter && s.Date.indexOf(dateFilter) !== -1;
@@ -497,6 +519,7 @@ function renderSongs(rows, dateFilter) {
 
     html += '<div class="song-card" data-id="' + id + '">'
       + '<div class="song-card-header">'
+        + '<span class="song-card-rank' + (isTop3 ? ' top3' : '') + '">#' + r + '</span>'
         + '<span class="song-card-title">'  + esc(songName)    + '</span>'
         + '<span class="song-card-count">'  + shows.length + '&times;</span>'
         + '<span class="song-card-toggle"><span class="toggle-arrow">' + (open ? '▲' : '▼') + '</span></span>'
